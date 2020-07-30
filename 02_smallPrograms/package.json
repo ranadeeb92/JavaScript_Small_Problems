@@ -1,0 +1,19 @@
+{
+  "name": "lesson_2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.5.0",
+    "eslint-cli": "^1.1.1",
+    "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node mortgage_calculator/mortgage_calculator.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rana Deeb",
+  "license": "ISC"
+}

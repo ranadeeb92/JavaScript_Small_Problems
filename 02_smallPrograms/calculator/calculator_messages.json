@@ -1,0 +1,20 @@
+{ 
+  "English" : {
+    "greeting" : "Welcom to caculator program!",
+    "get_first_number" : "Enter your first number",
+    "get_second_number" : "Enter your second number",
+    "get_operation" : "What operation you want?\n1)Add 2)Subtract 3)Multiply 4)Divide",
+    "get_valid_number" : "Humm ... you should enter a valid number",
+    "get_valid_opertion" : "Must choose 1, 2, 3 or 4",
+    "get_agreement_for_next_calc" : "Would you like to do another calculation? Enter y/n"
+  },
+  "Frensh" : {
+    "greeting": "Bienvenue au programme caculator!",
+    "get_first_number": "Entrez votre premier numéro",
+    "get_second_number": "Entrez votre deuxième numéro",
+    "get_operation": "Quelle opération voulez-vous?\n1) Ajouter 2) Soustraire 3) Multiplier 4) Diviser",
+    "get_valid_number": "Humm ... vous devez entrer un nombre valide",
+    "get_valid_opertion": "Doit choisir 1, 2, 3 ou 4",
+    "get_agreement_for_next_calc": "Souhaitez-vous faire un autre calcul? Entrez y/n"
+  }
+}

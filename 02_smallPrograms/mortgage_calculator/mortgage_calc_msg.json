@@ -1,0 +1,16 @@
+{
+  "welcome" : "Welcome To Mortgage Calculator",
+  "loanAmount" : "Enter the loan amount",
+  "YearsAndMonths" : "IS the loan duration an integer number of years ? Enter yes or no", 
+  "loanTerm" : "Enter the loan duration (in years)",
+  "apr" : "Enter the Annual percentage Rate",
+  "invalidLoanAmount" : "Please Enter the loan amount as an integer number",
+  "invalidYears" : "Please, Enter the loan duration years as an integer",
+  "enteryears" : "Please enter the loan duration years first ",
+  "enterMonths" : "Now enter the number of months",
+  "invalidMonths" : "Please enter the months as an integer number between 1 - 12",
+  "invalidAPR" : "Please Enter the Annual percentage Rate as an integer number",
+  "anotherRound" : "Another Calculation ? Enter yes or no",
+  "invalidAnswer" : "Please Enter yes or no"
+
+}
