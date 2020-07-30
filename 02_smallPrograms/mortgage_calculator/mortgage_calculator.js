@@ -55,6 +55,10 @@ while (true) {
   let loanTermYears = 0;
   prompt('YearsAndMonths');
   let userAnswer = readline.question().toLowerCase();
+  while (userAnswer !== 'yes' && userAnswer !== 'no') {
+    prompt('invalidAnswer');
+    userAnswer = readline.question().toLowerCase();
+  }
   if (userAnswer[0] === "y") {
     prompt('loanTerm');
     loanTermYears = readline.question();
@@ -76,6 +80,7 @@ while (true) {
       loanTermMonths = readline.question();
     }
   }
+
 
   // Ask the user to enter the Anuual Percentage Rate
   prompt("apr");
