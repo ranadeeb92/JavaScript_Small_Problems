@@ -9,8 +9,7 @@ function prompt(key) {
 function isInvalidInput(userInput) {
   return userInput.trim === '' ||
          Number(userInput) < 0 ||
-         Number.isNaN(Number(userInput)) ||
-         !Number.isInteger(Number(userInput));
+         Number.isNaN(Number(userInput));
 }
 
 
@@ -41,54 +40,97 @@ function getMonthlyPayment(
   return monthlyPayment;
 }
 
+const retrieveInput = (invalidInput, promptMsg) => {
+  let input;
+  prompt(promptMsg);
+  input = readline.question().toLowerCase();
+  while (invalidInput(input)) {
+    prompt(`invalid${promptMsg}`);
+    input = readline.question().toLowerCase();
+  }
+  return input;
+};
+
+const isInvalidYesOrNoAnswer = (answer) => {
+  return answer !== 'yes' && answer !== 'no';
+};
+
+const isDurationYears = (answer) => {
+  if (answer[0] === 'y') {
+    return true;
+  } else  {
+    return false;
+  }
+};
+
+const isPlayAgain = (answer) => {
+  if (answer[0] === 'y') {
+    return true;
+  } else  {
+    return false;
+  }
+};
+
+
 while (true) {
   prompt('welcome');
   // Ask the user to enter the loan Amount
-  prompt('loanAmount');
-  let loanAmount = readline.question();
-  while (isInvalidInput(loanAmount)) {
-    prompt('invalidLoanAmount');
-    loanAmount = readline.question();
+  let loanAmount = retrieveInput(isInvalidInput, 'loanAmount');
+  while (Number(loanAmount) === 0) {
+    prompt('zeroLoanAmount');
+    loanAmount = retrieveInput(isInvalidInput, 'loanAmount');
   }
+  // prompt('loanAmount');
+  // let loanAmount = readline.question();
+  // while (isInvalidInput(loanAmount)) {
+  //   prompt('invalidLoanAmount');
+  //   loanAmount = readline.question();
+  // }
+
   // Assk the user to enter the loaan duration in years
   let loanTermMonths = 0;
   let loanTermYears = 0;
-  prompt('YearsAndMonths');
-  let userAnswer = readline.question().toLowerCase();
-  while (userAnswer !== 'yes' && userAnswer !== 'no') {
-    prompt('invalidAnswer');
-    userAnswer = readline.question().toLowerCase();
-  }
-  if (userAnswer[0] === "y") {
-    prompt('loanTerm');
-    loanTermYears = readline.question();
-    while (isInvalidInput(loanTermYears)) {
-      prompt('invalidYears');
-      loanTermYears = readline.question();
-    }
-  } else if (userAnswer[0] === 'n') {
-    prompt('enteryears');
-    loanTermYears = readline.question();
-    while (isInvalidInput(loanTermYears)) {
-      prompt('invalidYears');
-      loanTermYears = readline.question();
-    }
-    prompt('enterMonths');
-    loanTermMonths = readline.question();
-    while (isInvalidInput(loanTermMonths) || loanTermMonths > 12) {
-      prompt('invalidMonths');
-      loanTermMonths = readline.question();
-    }
+  let userAnswer = retrieveInput(isInvalidYesOrNoAnswer, 'answer');
+  // prompt('YearsAndMonths');
+  // let userAnswer = readline.question().toLowerCase();
+  // while (userAnswer !== 'yes' && userAnswer !== 'no') {
+  //   prompt('invalidAnswer');
+  //   userAnswer = readline.question().toLowerCase();
+  // }
+  if (isDurationYears(userAnswer)) {
+    loanTermYears = retrieveInput(isInvalidInput, "loanYears");
+    // prompt('loanTerm');
+    // loanTermYears = readline.question();
+    // while (isInvalidInput(loanTermYears)) {
+    //   prompt('invalidYears');
+    //   loanTermYears = readline.question();
+    // }
+  } else {
+    loanTermYears = retrieveInput(isInvalidInput, 'loanYears');
+    loanTermMonths = retrieveInput(isInvalidInput, 'loanMonths');
+    // prompt('enteryears');
+    // loanTermYears = readline.question();
+    // while (isInvalidInput(loanTermYears)) {
+    //   prompt('invalidYears');
+    //   loanTermYears = readline.question();
+    // }
+    // prompt('enterMonths');
+    // loanTermMonths = readline.question();
+    // while (isInvalidInput(loanTermMonths) || loanTermMonths > 12) {
+    //   prompt('invalidMonths');
+    //   loanTermMonths = readline.question();
+    // }
   }
 
 
   // Ask the user to enter the Anuual Percentage Rate
-  prompt("apr");
-  let apr = readline.question();
-  while (isInvalidInput(apr)) {
-    prompt('invalidAPR');
-    apr = readline.question();
-  }
+  let apr = retrieveInput(isInvalidInput, "apr");
+  // prompt("apr");
+  // let apr = readline.question();
+  // while (isInvalidInput(apr)) {
+  //   prompt('invalidAPR');
+  //   apr = readline.question();
+  // }
 
   let loanTermInMonths = yearsToMonths(loanTermYears, loanTermMonths);
   let mpr = getMonthlyInterestRate(apr);
@@ -96,11 +138,12 @@ while (true) {
 
   console.log(`Your Monthly payment is ${monthlyPayment.toFixed(2)}`);
 
-  prompt('anotherRound');
-  let answer = readline.question().toLowerCase();
-  while (answer !== 'yes' && answer !== 'no') {
-    prompt('invalidAnswer');
-    answer = readline.question().toLowerCase();
-  }
-  if (answer[0] === 'n') break;
+  let answer = retrieveInput(isInvalidYesOrNoAnswer, 'playAgain');
+  // prompt('anotherRound');
+  // let answer = readline.question().toLowerCase();
+  // while (answer !== 'yes' && answer !== 'no') {
+  //   prompt('invalidAnswer');
+  //   answer = readline.question().toLowerCase();
+  // }
+  if (!isPlayAgain(answer)) break;
 }
