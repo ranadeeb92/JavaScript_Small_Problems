@@ -1,0 +1,12 @@
+{
+  "welcome" : "Welcome to Rock, Paper, Scissors, Lizard and Spock Program",
+  "choice" : "choice one by enter the first letter:",
+  "invalidchoice" : "Invalid input, Re-enter one: ",
+  "playAgain" : "Game Over, Would you like to paly again?Enter yes or no",
+  "invalidplayagain" : "Please Enter yes or no",
+  "specialInput" : "Please enter sc for scissors or sp for spock",
+  "invalidspecialInput" :"you should enter sc for scissors or sp for spock",
+  "userWins" : "You Are The Winner!",
+  "computerWins" : "The Computer Is The Winner!",
+  "tie" : "It Is a tie!"
+}
