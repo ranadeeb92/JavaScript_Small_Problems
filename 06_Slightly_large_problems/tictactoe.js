@@ -92,14 +92,39 @@ function joinOr(arr, delimiter = ',', word = 'or') {
     return str;
   }
 }
-//keepscore()
+//keepscore
+// incrementWinnerScore() function
+function incrementWinnerScore(gameWinner, scoresObj) {
+  if (gameWinner === 'Player') {
+    scoresObj['playerScore'] = scoresObj['playerScore'] + 1 || 1;
+  } else {
+    scoresObj['computerScore'] = scoresObj['computerScore'] + 1 || 1;
+  }
+  return scoresObj;
+}
+
+// checkScores() function
+function checkScores(scoresObj) {
+  return Object.values(scoresObj).some(score => score === 5);
+}
+
+// detectMatchWinner() function 
+function detectMatchWinner(scoresObj) {
+  if (scoresObj['playerScore'] === 5) {
+    return 'Player';
+  } else {
+    return 'Computer';
+  }
+}
 
 
 
-function displayBoard(currentBoard) {
+function displayBoard(currentBoard, scores) {
   console.clear();
 
   console.log(`You are ${HUMAN_MARKER} and the computer is ${COMPUTER_MAKER}`);
+  console.log('');
+  console.log(`Your score is ${scores['playerScore']} and Computer score is ${scores['computerScore']}`);
 
   console.log('');
   console.log('     |     |');
@@ -114,34 +139,40 @@ function displayBoard(currentBoard) {
   console.log(`  ${currentBoard['7']}  |  ${currentBoard['8']}  |  ${currentBoard['9']}  `);
   console.log('     |     |');
 }
-
-
-  while (true) {
-
+while (true) {
+  let scores = { playerScore: 0, computerScore : 0};
+  while (!checkScores(scores)) {
     let board =  initializeBoard();
 
     while (true) {
-      displayBoard(board);
+      displayBoard(board, scores);
       playerChooseSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
       computerChooseSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
     }
-    displayBoard(board);
+    displayBoard(board, scores);
 
     if (someoneWon(board)) {
+      scores = incrementWinnerScore(detectWinner(board), scores);
+      displayBoard(board, scores);
       prompt(`${detectWinner(board)} Win!`);
     } else {
       prompt('It is a tie!');
     }
-    //keepScore
-
-    //paly again
-    prompt('Would you like to play again?(Y/N)');
-    let answer =  readline.question().toLowerCase();
-
-    if(answer !== 'y') break;
+    if(!checkScores(scores)){
+      readline.question('Enter any key to continue..');
+    }
   }
 
+  // display match winner
+  prompt(`Match ends and ${detectMatchWinner(scores)} wins!`);
+
+  //paly again
+  prompt('Would you like to play again?(Y/N)');
+  let answer =  readline.question().toLowerCase();
+
+  if(answer !== 'y') break;
+}
 
 prompt('Thank you for playing Tic Tac Toe game');
