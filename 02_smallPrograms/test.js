@@ -1,24 +1,8 @@
-console.log(foo());
-
-
-
-function foo() {
-  console.log('waiting for bar!');
-} 
-
-function foo() {
-  console.log(foo);
-  function bar() {
-    console.log('bar again');
-  }
-   bar();
-  function bar() {
-    console.log('bar again and again');
-  }
+function square(num) {
+  return num * num;
 }
 
+let myArr = [1, 2, 3, 4, 5, 6];
+let squares = myArr.map(num => square(num));
 
-
-
-
-
+console.log(squares);
