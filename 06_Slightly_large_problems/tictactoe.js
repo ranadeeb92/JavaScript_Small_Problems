@@ -9,6 +9,7 @@ const WINNING_LINES = [
 ];
 const SETTING = 'computer';
 const OPTIONS = ['player', 'computer'];
+const VALID_PLAYAGAIN_ANSWERS = ['yes', 'no', 'y', 'n'];
 
 //prompt function
 function prompt(msg) {
@@ -19,7 +20,7 @@ function prompt(msg) {
 function whoGoesFirst(isValid) {
   prompt(`Who moves first ${joinOr(OPTIONS)}`);
   let input = readline.question().toLowerCase();
-  while (!isValid(input)) {
+  while (!isValid(input, OPTIONS)) {
     prompt(`Please choose one of ${joinOr(OPTIONS)}`);
     input = readline.question().toLowerCase();
   }
@@ -27,8 +28,8 @@ function whoGoesFirst(isValid) {
 }
 
 // check user input
-function isValidInput(input) {
-  return OPTIONS.includes(input);
+function isValidInput(input, validOptions) {
+  return validOptions.includes(input.toLowerCase());
 }
 
 //start games with choosen player
@@ -152,7 +153,7 @@ function joinOr(arr, delimiter = ',', word = 'or') {
     return str;
   }
 }
-//keepscore
+// keepscore
 // incrementWinnerScore() function
 function incrementWinnerScore(gameWinner, scoresObj) {
   if (gameWinner === 'Player') {
@@ -176,6 +177,18 @@ function detectMatchWinner(scoresObj) {
     return 'Computer';
   }
 }
+
+// playAgain() 
+function playAgain(isValid) {
+  prompt('Would you like to play again?(Y/N)');
+  let answer =  readline.question();
+  while (!isValid(answer, VALID_PLAYAGAIN_ANSWERS)) {
+    prompt('Invalid input, Please enter (Y/N)');
+    answer = readline.question();
+  }
+  return answer[0].toLowerCase() === 'y' ? true : false;
+}
+
 
 
 
@@ -211,8 +224,6 @@ while (true) {
       chooseSquare(currentPlayer, board);
       if (someoneWon(board) || boardFull(board)) break;
       currentPlayer = currentPlayer === 'player' ? 'computer' : 'player';
-      // computerChooseSquare(board);
-      // if (someoneWon(board) || boardFull(board)) break;
     }
     displayBoard(board, scores);
 
@@ -232,10 +243,7 @@ while (true) {
   prompt(`Match ends and ${detectMatchWinner(scores)} wins!`);
 
   //paly again
-  prompt('Would you like to play again?(Y/N)');
-  let answer =  readline.question().toLowerCase();
-
-  if(answer !== 'y') break;
+  if(!playAgain(isValidInput)) break;
 }
 
 prompt('Thank you for playing Tic Tac Toe game');
