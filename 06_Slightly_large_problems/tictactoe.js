@@ -7,11 +7,40 @@ const WINNING_LINES = [
   [1, 4, 7], [2, 5, 8], [3, 6, 9],
   [1, 5, 9], [3, 5, 7]  
 ];
-// const MATCH_GAMES = 2;
+const SETTING = 'computer';
+const OPTIONS = ['player', 'computer'];
 
 //prompt function
 function prompt(msg) {
   console.log(`${msg}`);
+}
+
+// Ask user who goes first with games
+function whoGoesFirst(isValid) {
+  prompt(`Who moves first ${joinOr(OPTIONS)}`);
+  let input = readline.question().toLowerCase();
+  while (!isValid(input)) {
+    prompt(`Please choose one of ${joinOr(OPTIONS)}`);
+    input = readline.question().toLowerCase();
+  }
+  return input;
+}
+
+// check user input
+function isValidInput(input) {
+  return OPTIONS.includes(input);
+}
+
+//start games with choosen player
+function chooseSquare(chosenPlayer, currentBoard) {
+  switch(chosenPlayer) {
+    case 'player' :
+      return playerChooseSquare(currentBoard); 
+    case 'computer' :
+      return computerChooseSquare(currentBoard); 
+    default:
+      return playerChooseSquare(currentBoard);
+  }
 }
 
 // function that return the initail board object
@@ -175,14 +204,15 @@ while (true) {
   let scores = { playerScore: 0, computerScore : 0};
   while (!checkScores(scores)) {
     let board =  initializeBoard();
+    let currentPlayer = SETTING === 'choose' ? whoGoesFirst(isValidInput) : SETTING;
 
     while (true) {
       displayBoard(board, scores);
-      playerChooseSquare(board);
+      chooseSquare(currentPlayer, board);
       if (someoneWon(board) || boardFull(board)) break;
-      computerChooseSquare(board);
-      readline.question('Enter any key to continue..');
-      if (someoneWon(board) || boardFull(board)) break;
+      currentPlayer = currentPlayer === 'player' ? 'computer' : 'player';
+      // computerChooseSquare(board);
+      // if (someoneWon(board) || boardFull(board)) break;
     }
     displayBoard(board, scores);
 
