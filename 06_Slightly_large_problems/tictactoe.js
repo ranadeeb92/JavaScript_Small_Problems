@@ -2,6 +2,11 @@ const readline = require('readline-sync');
 const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MAKER = 'O';
+const WINNING_LINES = [
+  [1, 2, 3], [4, 5, 6], [7, 8, 9],
+  [1, 4, 7], [2, 5, 8], [3, 6, 9],
+  [1, 5, 9], [3, 5, 7]  
+];
 // const MATCH_GAMES = 2;
 
 //prompt function
@@ -41,31 +46,57 @@ function playerChooseSquare(currentBoard) {
 
 }
 
-//computerChooseSquare() function
+function getSquare(currentBoard, marker) {
+  let square;
+  for (let line of WINNING_LINES) {
+    if (line.filter(ele => currentBoard[ele] === marker).length === 2 &&
+        line.some(ele => currentBoard[ele] === INITIAL_MARKER)) {
+          square = line.find(ele => currentBoard[ele] === INITIAL_MARKER);
+          break;
+        }
+  }
+  return square;
+}
+
+function findThreateningSquare(currentBoard, minded) {
+  // return array of threatening lines and they contains at least one empty square
+  let square;
+  if (minded === 'Offensive-minded') {
+  square = getSquare(currentBoard, COMPUTER_MAKER);
+} else {
+  square = getSquare(currentBoard, HUMAN_MARKER);
+}
+return square ? square : null;
+}
+
+
 function computerChooseSquare(currentBoard) {
   let emptySquares = getEmptySquares(currentBoard);
-  //choose random index from emptySquare array
-  let randomIndex = Math.floor(Math.random() * emptySquares.length);
-  // get the element(square number) corresponds with that index
-  let square = emptySquares[randomIndex];
-  currentBoard[square] = COMPUTER_MAKER;
-  return currentBoard;
+   //offensive-minded or defensive-minded
+   let square = findThreateningSquare(currentBoard, 'Offensive-minded') ||
+                findThreateningSquare(currentBoard); 
+   // no offensive or definsive square             
+   if(!square) {
+     if(emptySquares.includes('5')) square = '5';
+     else {
+        //choose random index from emptySquare array
+        let randomIndex = Math.floor(Math.random() * emptySquares.length);
+        square = emptySquares[randomIndex];}
+  }
+   currentBoard[square] = COMPUTER_MAKER;
+   return currentBoard;
 }
+
 
 function boardFull(currentBoard) {
   return getEmptySquares(currentBoard).length === 0;
 }
 
 function detectWinner(currentBoard) {
-  let winningLines = [
-    [1, 2, 3], [4, 5, 6], [7, 8, 9],
-    [1, 4, 7], [2, 5, 8], [3, 6, 9],
-    [1, 5, 9], [3, 5, 7]  
-  ]
-  for (let line = 0;line < winningLines.length; line++) {
-    if (winningLines[line].every(ele => currentBoard[ele] === HUMAN_MARKER)) {
+  for (let line = 0;line < WINNING_LINES.length; line++) {
+    if (WINNING_LINES[line].every(ele => currentBoard[ele] === HUMAN_MARKER)) {
       return 'Player';
-    } else if(winningLines[line].every(ele => currentBoard[ele] === COMPUTER_MAKER)){
+    } else if(WINNING_LINES[line].every(ele => currentBoard[ele] === COMPUTER_MAKER)){
       return 'Computer';
     }
   }
@@ -139,6 +170,7 @@ function displayBoard(currentBoard, scores) {
   console.log(`  ${currentBoard['7']}  |  ${currentBoard['8']}  |  ${currentBoard['9']}  `);
   console.log('     |     |');
 }
+
 while (true) {
   let scores = { playerScore: 0, computerScore : 0};
   while (!checkScores(scores)) {
@@ -149,6 +181,7 @@ while (true) {
       playerChooseSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
       computerChooseSquare(board);
+      readline.question('Enter any key to continue..');
       if (someoneWon(board) || boardFull(board)) break;
     }
     displayBoard(board, scores);
