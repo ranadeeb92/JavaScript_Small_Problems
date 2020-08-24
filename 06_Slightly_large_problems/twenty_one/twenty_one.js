@@ -32,14 +32,18 @@ function initializeDeck() {
   return deck;
 }
 
+function getRandomIndex(array) {
+  return Math.floor(Math.random() * array.length);
+}
+
 // get random suit with it's values from Deck object
 function getRandomSuit(deck) {
   // get random index from SUITS array
-  let randomSuitIndex = Math.floor(Math.random() * SUITS.length);
+  let randomSuitIndex = getRandomIndex(SUITS);
   let randomSuit = SUITS[randomSuitIndex];
   // check if this suit array is not empty
   while (deck[randomSuit].length === 0) {
-    randomSuitIndex = Math.floor(Math.random() * SUITS.length);
+    randomSuitIndex = getRandomIndex(SUITS);
     randomSuit = SUITS[randomSuitIndex];
   }
   return [randomSuit, deck[randomSuit]];
@@ -51,7 +55,7 @@ function dealCard(deck, playerCrads) {
   // get random suit with it's array of cards values
   let [suit ,suitArray] = getRandomSuit(deck);
   // get random index from suit array
-  let randomCardIndex = Math.floor(Math.random() * suitArray.length);
+  let randomCardIndex = getRandomIndex(suitArray);
   let card = suitArray[randomCardIndex];
   // add the card to the player cards array
   playerCrads.push([suit, card]);
@@ -134,7 +138,7 @@ function playerTurn(deck, isValid, playerCardsArray) {
       prompt(`${playerCardsArray}`);
     } else {
       // if choose stay
-      return 'next';
+      return 'stay';
     }
     playerCardValuesTotal = getTotal(playerCardsArray);
     prompt(`CardValuesTotal is ${playerCardValuesTotal}`);
@@ -142,21 +146,62 @@ function playerTurn(deck, isValid, playerCardsArray) {
   return 'bust';
 }
 
-
-let deckObject = initializeDeck();
-let [playerArr, dealerArr] = setupPlayersCardsArrays(deckObject);
-prompt(`player Cards Array ${playerArr}`);
-prompt(`known dealer card ${getKnownDealerCard(dealerArr)}`);
-
-console.log(playerArr);
-let str = playerTurn(deckObject, isValidInput, playerArr);
-if (str === 'bust') {
-  prompt('dealer wins');
-} else {
-  prompt('dealer turn');
+// dealer turn
+function dealerTurn(deck, dealerCardsArray) {
+  let dealerCardValuesTotal = getTotal(dealerCardsArray);
+  while (dealerCardValuesTotal < 17) {
+    dealCard(deck, dealerCardsArray);
+    dealerCardValuesTotal = getTotal(dealerCardsArray);
+  }
+  return bust(dealerCardValuesTotal) ? 'bust' : 'stay';
 }
 
+// compare totals if both players stay
+function compareTotals(playerCardsArray, dealerCardsArray) {
+  let playerTotal = getTotal(playerCardsArray);
+  let dealerTotal = getTotal(dealerCardsArray);
+  prompt(`Player Cards Total is ${playerTotal} and Dealer Cards Tolal is ${dealerTotal}`);
+  if (playerTotal === dealerTotal) return 'tie';
+  return playerTotal > dealerTotal ? 'Player' : 'Dealer';
+}
 
+function playGame() {
+  let winner;
+  let deckObject = initializeDeck();
+  let [playerArr, dealerArr] = setupPlayersCardsArrays(deckObject);
+  prompt(`player Cards Array ${playerArr}`);
+  prompt(`known dealer card ${getKnownDealerCard(dealerArr)}`);
+
+  let playerBustOrStay = playerTurn(deckObject, isValidInput, playerArr);
+  if (playerBustOrStay === 'bust') {
+    winner = 'Dealer';
+  } else {
+    let dealerBustOrStay = dealerTurn(deckObject, dealerArr);
+    if (dealerBustOrStay === 'bust') {
+      winner = 'Player';
+    } else {
+      winner = compareTotals(playerArr, dealerArr);
+    }
+  }
+  return winner;
+}
+
+// display result
+function displayResult(result) {
+  switch (result) {
+    case 'Player' :
+      prompt('Player won!');
+      break;
+    case 'Dealer' :
+      prompt('Dealer Won!');
+      break;
+    default :
+      prompt('It is a tie!');
+  }
+}
+
+let gameResult = playGame();
+displayResult(gameResult);
 // console.log('--1--');
 // dealCard(deckObject, playerArr);
 // console.log(playerArr);
