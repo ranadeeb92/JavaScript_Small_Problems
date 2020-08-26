@@ -1,0 +1,10 @@
+{
+  "hitOrStay" : "Choose Hit or Stay",
+  "playAgain" : "Would you like to play again? (Y/N)",
+  "playerWon" : "Player won!",
+  "dealerWon" : "dealer Won!",
+  "playerBust" : "Player Bust, Dealer Won!",
+  "dealerBust" : "Dealer Bust, Player Won!",
+  "tie" : "It is a tie!",
+  "contiueTheMatch" : "Press any key to continue"
+}
